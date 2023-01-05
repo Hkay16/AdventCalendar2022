@@ -1,6 +1,8 @@
 #include <string>
 #include <fstream>
 #include <iostream>
+#include <vector>
+#include <bits/stdc++.h>
 using namespace std;
 
 int main (int argc, char *argv[]) {
@@ -15,7 +17,7 @@ int main (int argc, char *argv[]) {
     ifstream fp;
     fp.open(filename);
     if (!fp.is_open()) {
-        cout << "Error: Cannot open file named '" << filename << ".'" << endl;
+        cout << "Error: Cannot open file named '" << filename << "'" << endl;
         return -1;
     }
 
@@ -23,22 +25,27 @@ int main (int argc, char *argv[]) {
     string input;
     int sum;
     int max = -1;
+    int maxThree;
+    vector<int> totals;
     while (!fp.eof()) {
         getline(fp, input);
         if (input.length() != 0) {
             sum += stoi(input);
         }
         else {
-            if (sum > max) {
-                max = sum;
-            }
+            totals.push_back(sum);
             sum = 0;
         }
     }
     fp.close();
 
-    // Print max
-    cout << "The elf with the most calories holds " << max << " calories." << endl;
+    sort(totals.begin(), totals.end());
+    max = totals.at(totals.size()-1);
+    maxThree = max + totals.at(totals.size()-2) + totals.at(totals.size()-3);
+
+    // Print max(s)
+    cout << "Part 1: The elf with the most calories holds " << max << " calories." << endl;
+    cout << "Part 2: The top three elves with the most calories hold " << maxThree << " calories." << endl;
 
     return 0;
 }
