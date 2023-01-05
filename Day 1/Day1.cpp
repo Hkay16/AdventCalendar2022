@@ -1,4 +1,5 @@
-#include <string.h>
+#include <string>
+#include <fstream>
 #include <iostream>
 using namespace std;
 
@@ -8,11 +9,12 @@ int main (int argc, char *argv[]) {
         cout << "Error: Correct command line usage is './a.out [input.txt]'" << endl;
         return -1;
     }
-    string filename = argv[2];
+    string filename = argv[1];
 
     // Open input file
-    istream *fp;
-    if (!fp.open(filename)) {
+    ifstream fp;
+    fp.open(filename);
+    if (!fp.is_open()) {
         cout << "Error: Cannot open file named '" << filename << ".'" << endl;
         return -1;
     }
@@ -22,8 +24,9 @@ int main (int argc, char *argv[]) {
     int sum;
     int max = -1;
     while (!fp.eof()) {
-        if (getline(fp, input)) != "") {
-            sum += stoi(line);
+        getline(fp, input);
+        if (input.length() != 0) {
+            sum += stoi(input);
         }
         else {
             if (sum > max) {
@@ -32,6 +35,7 @@ int main (int argc, char *argv[]) {
             sum = 0;
         }
     }
+    fp.close();
 
     // Print max
     cout << "The elf with the most calories holds " << max << " calories." << endl;
