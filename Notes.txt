@@ -1,0 +1,6 @@
+List of useful git commands:
+    git add -A && git commit -m "Your Message"
+    git add [file.txt]
+    git commit
+    git commit -m "Your Message"
+    git push
