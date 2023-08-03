@@ -4,3 +4,9 @@ List of useful git commands:
     git commit
     git commit -m "Your Message"
     git push
+    git pull
+    git checkout -b [Branch-Name]
+    git checkout [Branch-Name]
+    git revert [commit id]
+    git log
+    git status
