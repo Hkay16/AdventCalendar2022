@@ -97,7 +97,7 @@ def main():
             col_1 = input_file.read(1)
             col_2 = input_file.read(1)
             col_2 = input_file.read(1)
-            eof = input_file.readline()
+            eof = input_file.readline(5_000_000)
 
             # Part 1:
             part1_score += check_myself_p1(col_2) + check_win_p1(col_1, col_2)
