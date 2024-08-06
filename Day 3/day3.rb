@@ -1,32 +1,56 @@
-unless ARGV.length == 1
-    puts "Incorrect number of command line arguements."
-    puts "Usage: ruby MyScript.rb [input.txt]"
+unless ARGV.length == 2
+    puts "Incorrect number of command line arguments."
+    puts "Usage: ruby MyScript.rb [input.txt] [part]"
     exit
 end
 
+input_file = ARGV[0]
+part = ARGV[1].to_i
+
+# Function to split string into two halves
 def halves(str)
-    rgx = /(?<=\A.{#{str.size/2}})/
-    str.split(rgx)
+    mid = str.size / 2
+    [str[0...mid], str[mid..-1]]
 end
 
-alphabet = ('a'..'z').to_a
-priority = (1..52).to_a
+# Define priorities for each letter
+priorities = {}
+('a'..'z').each_with_index { |char, index| priorities[char] = index + 1 }
+('A'..'Z').each_with_index { |char, index| priorities[char] = index + 27 }
 
-priorities = Hash[ "a"=>1, "b"=>2, "c"=>3, "d"=>4, "e"=>5, "f"=>6, "g"=>7, "h"=>8, "i"=>9, "j"=>10, "k"=>11, "l"=>12, "m"=>13, "n"=>14, "o"=>15, "p"=>16, "q"=>17, "r"=>18, "s"=>19, "t"=>20, "u"=>21, "v"=>22, "w"=>23, "x"=>24, "y"=>25, "z"=>26, "A"=>27, "B"=>28, "C"=>29, "D"=>30, "E"=>31, "F"=>32, "G"=>33, "H"=>34, "I"=>35, "J"=>36, "K"=>37, "L"=>38, "M"=>39, "N"=>40, "O"=>41, "P"=>42, "Q"=>43, "R"=>44, "S"=>45, "T"=>46, "U"=>47, "V"=>48, "W"=>49, "X"=>50, "Y"=>41, "Z"=>52 ]
+# Initialize an array to store common letters' priorities
+common_letters_priorities = []
 
-commonLetters = Array.new
-File.readlines(ARGV[0]).each do |line|
-    first, second = halves(line)
-    for i in 0..1 do
-        for j in 0..1 do
-            if (first[i] == second[j] && first[i] != nil)
-                commonLetters.push(priorities[first[i]])
+# Read the file line by line
+lines = File.readlines(input_file).map(&:chomp)
+
+if part == 1
+    # Part 1: Find common items in each rucksack's compartments
+    lines.each do |line|
+        first, second = halves(line)
+        common_item = (first.chars & second.chars).first
+        if common_item
+            common_letters_priorities.push(priorities[common_item])
+        end
+    end
+elsif part == 2
+    # Part 2: Find common items among each group of three rucksacks
+    lines.each_slice(3) do |group|
+        if group.size == 3
+            first, second, third = group
+            common_item = (first.chars & second.chars & third.chars).first
+            if common_item
+                common_letters_priorities.push(priorities[common_item])
             end
         end
     end
+else
+    puts "Invalid part number. Please specify 1 or 2."
+    exit
 end
 
-sum = 0
-commonLetters.each { |a| sum += a }
+# Calculate the sum of the priorities
+sum = common_letters_priorities.sum
 
+# Output the result
 puts sum
